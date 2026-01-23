@@ -7,6 +7,19 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 def clip(value, lower, upper):
     return lower if value < lower else upper if value > upper else value
 
+def sameflavor(Htt, Hmm, Hee, Hgg, Hqq, Hcc, Hbb, QCD):
+    try:
+        x = Htt/(Htt + Hmm + Hee + Hgg + Hqq + Hcc + Hbb + QCD)
+    except ZeroDivisionError:
+        x = 0
+    return x
+
+def emg(Htt, Hmm, Hee, Hgg):
+    try:
+        x = Htt/(Htt + Hmm + Hee + Hgg)
+    except ZeroDivisionError:
+        x = 0
+    return x
 
 def deltaPhi(phi1, phi2):
     try:
@@ -46,6 +59,33 @@ def closest(obj, collection, presel=lambda x, y: True):
             dr2Min = dr2
     return (ret, math.sqrt(dr2Min))
 
+def closest_dphi(obj, collection, presel=lambda x, y: True):
+    ret = None
+    dphiMin = 1e6
+    index = -1
+    for x in collection:
+        if not presel(obj, x):
+            continue
+        dphi = deltaPhi(obj.phi, x.phi)
+        if abs(dphi) < abs(dphiMin):
+            ret = x
+            index += 1
+            dphiMin = dphi
+    return (ret, dphiMin, index)
+
+
+def furthest(obj, collection, presel=lambda x, y: True):
+    ret = None
+    dr2Max = -100
+    for x in collection:
+        if not presel(obj, x):
+            continue
+        dr2 = deltaR2(obj, x)
+        if dr2 > dr2Max:
+            ret = x
+            dr2Max = dr2
+    return (math.sqrt(abs(dr2Max)))
+
 
 def polarP4(obj=None, pt='pt', eta='eta', phi='phi', mass='mass'):
     if obj is None:
@@ -60,7 +100,6 @@ def polarP4(obj=None, pt='pt', eta='eta', phi='phi', mass='mass'):
 def p4(obj=None, pt='pt', eta='eta', phi='phi', mass='mass'):
     v = polarP4(obj, pt, eta, phi, mass)
     return ROOT.Math.XYZTVector(v.px(), v.py(), v.pz(), v.energy())
-
 
 def sumP4(*args):
     p4s = [polarP4(x) for x in args]
@@ -85,10 +124,9 @@ def corrected_svmass(sv):
     pproj = polarP4(sv).P() * math.sin(sv.pAngle)
     return math.sqrt(sv.mass * sv.mass + pproj * pproj) + pproj
 
-
 def transverseMass(obj, met):
     cos_dphi = math.cos(deltaPhi(obj, met))
-    return math.sqrt(2 * obj.pt * met.pt * (1 - cos_dphi))
+    return math.sqrt(pow(obj.mass,2) + 2*met.pt*(math.sqrt(pow(obj.pt,2)+pow(obj.mass,2)) - obj.pt*cos_dphi))
 
 
 def minValue(collection, fallback=99):

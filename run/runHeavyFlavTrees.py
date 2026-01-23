@@ -18,6 +18,7 @@ default_config = {'sfbdt_threshold': -99,
 cut_dict_ak8 = {
     'photon': 'Sum$(Photon_pt>200 && Photon_cutBased>=2 && Photon_electronVeto)>0 && nFatJet>0',
     'qcd': 'Sum$((Jet_pt>25 && abs(Jet_eta)<2.4 && (Jet_jetId & 2)) * Jet_pt)>200 && nFatJet>0',
+    'ditau': 'Sum$(FatJet_pt > 200 && abs(FatJet_eta)<2.4) > 0 && nFatJet>0',
     'muon': 'Sum$(Muon_pt>55 && abs(Muon_eta)<2.4 && Muon_tightId && Muon_miniPFRelIso_all<0.10)>0 && nFatJet>0',
     'diboson': '(Sum$(Electron_pt>20 && abs(Electron_eta)<2.5 && abs(Electron_dxy)<0.05 && abs(Electron_dz)<0.2 && Electron_mvaFall17V2noIso_WP90 && Electron_miniPFRelIso_all<0.4) >= 2 ||'
                ' Sum$(Muon_pt>20 && abs(Muon_eta)<2.4 && abs(Muon_dxy)<0.05 && abs(Muon_dz)<0.2 && Muon_looseId && Muon_miniPFRelIso_all<0.4) >= 2) && nFatJet>0',
@@ -26,6 +27,7 @@ cut_dict_ak8 = {
 cut_dict_ak15 = {
     'photon': 'Sum$(Photon_pt>200 && Photon_cutBased>=2 && Photon_electronVeto)>0 && nAK15Puppi>0',
     'qcd': 'Sum$((Jet_pt>25 && abs(Jet_eta)<2.4 && (Jet_jetId & 2)) * Jet_pt)>200 && nAK15Puppi>0',
+    'ditau': 'Sum$(FatJet_pt > 200 && abs(FatJet_eta)<2.4) > 0 && nFatJet>0',
     'muon': 'Sum$(Muon_pt>55 && abs(Muon_eta)<2.4 && Muon_tightId && Muon_miniPFRelIso_all<0.10)>0 && nAK15Puppi>0',
     'diboson': '(Sum$(Electron_pt>20 && abs(Electron_eta)<2.5 && abs(Electron_dxy)<0.05 && abs(Electron_dz)<0.2 && Electron_mvaFall17V2noIso_WP90 && Electron_miniPFRelIso_all<0.4) >= 2 ||'
                ' Sum$(Muon_pt>20 && abs(Muon_eta)<2.4 && abs(Muon_dxy)<0.05 && abs(Muon_dz)<0.2 && Muon_looseId && Muon_miniPFRelIso_all<0.4) >= 2) && nAK15Puppi>0',
@@ -64,7 +66,7 @@ def _process(args):
         default_config['sfbdt_threshold'] = args.sfbdt
 
     if year < 2020:
-        args.weight_file = 'samples/xsec_2017.conf'
+        args.weight_file = 'samples/xsec_2018.conf'
     elif year == 2024:
         args.weight_file = 'samples/xsec_2024.conf'
     else:
@@ -164,7 +166,7 @@ def main():
     parser.add_argument('--channel',
                         type=str,
                         required=True,
-                        help='Channel: photon, qcd, muon, diboson, signal, inclusive, or comma separated list e.g., `qcd,photon`'
+                        help='Channel: photon, qcd, ditau, muon, diboson, signal, inclusive, or comma separated list e.g., `qcd,photon`'
                         )
 
     parser.add_argument('--sfbdt',

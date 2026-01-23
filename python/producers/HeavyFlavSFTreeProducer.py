@@ -1,5 +1,6 @@
 from .HeavyFlavPhotonSampleProducer import PhotonSampleProducer
 from .HeavyFlavQCDSampleProducer import QCDSampleProducer
+from .HeavyFlavDiTauSampleProducer import DiTauSampleProducer
 from .HeavyFlavMuonSampleProducer import MuonSampleProducer
 from .HeavyFlavDibosonSampleProducer import DibosonSampleProducer
 from .HeavyFlavInclusiveSampleProducer import InclusiveSampleProducer
@@ -21,5 +22,7 @@ def heavyFlavSFTreeFromConfig():
         return DibosonSampleProducer(**cfg)
     elif channel == 'inclusive':
         return InclusiveSampleProducer(**cfg)
+    elif channel == 'ditau':
+        return DiTauSampleProducer(**cfg)
     else:
         return RuntimeError('Unsupported channel %s' % channel)

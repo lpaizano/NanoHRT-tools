@@ -1,0 +1,80 @@
+dyll-nlo_PtZ:
+ - DYJetsToLL_LHEFilterPtZ-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - DYJetsToLL_LHEFilterPtZ-250To400_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - DYJetsToLL_LHEFilterPtZ-400To650_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - DYJetsToLL_LHEFilterPtZ-650ToInf_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+
+wjets:
+ - WJetsToLNu_Pt-100To250_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WJetsToLNu_Pt-250To400_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WJetsToLNu_Pt-400To600_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WJetsToLNu_Pt-600ToInf_MatchEWPDG20_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WJetsToQQ_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8
+ - WJetsToQQ_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8
+ - WJetsToQQ_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8
+ - WJetsToQQ_HT-800toInf_TuneCP5_13TeV-madgraphMLM-pythia8
+
+
+zjets:
+ - ZJetsToQQ_HT-200to400_TuneCP5_13TeV-madgraphMLM-pythia8
+ - ZJetsToQQ_HT-400to600_TuneCP5_13TeV-madgraphMLM-pythia8
+ - ZJetsToQQ_HT-600to800_TuneCP5_13TeV-madgraphMLM-pythia8
+ - ZJetsToQQ_HT-800toInf_TuneCP5_13TeV-madgraphMLM-pythia8
+
+diboson:
+ - ZZTo4Q_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - ZZTo2L2Nu_TuneCP5_13TeV_powheg_pythia8
+ - ZZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - ZZTo4L_TuneCP5_13TeV_powheg_pythia8
+ - ZZTo2Q2Nu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WZTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WZTo1L3Nu_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WZTo2Q2L_mllmin4p0_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WWTo4Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WWTo1L1Nu2Q_4f_TuneCP5_13TeV-amcatnloFXFX-pythia8
+ - WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8
+
+singletop:
+ - ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8
+ - ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8
+ - ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8
+ - ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8
+ - ST_s-channel_4f_hadronicDecays_TuneCP5_13TeV-amcatnlo-pythia8
+ - ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8
+
+ttv:
+ - TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8
+ - TTWW_TuneCP5_13TeV-madgraph-pythia8
+ - TTWZ_TuneCP5_13TeV-madgraph-pythia8
+ - TTZToQQ_TuneCP5_13TeV-amcatnlo-pythia8
+ - TTZZ_TuneCP5_13TeV-madgraph-pythia8
+ - TTWJetsToLNu_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8
+ - TTZToLLNuNu_M-10_TuneCP5_13TeV-amcatnlo-pythia8
+
+ttbar:
+ - TTToHadronic_TuneCP5_13TeV-powheg-pythia8
+ - TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8
+ - TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8
+
+qcd-pt:
+ - QCD_Pt_80to120_TuneCP5_13TeV_pythia8
+ - QCD_Pt_120to170_TuneCP5_13TeV_pythia8
+ - QCD_Pt_170to300_TuneCP5_13TeV_pythia8
+ - QCD_Pt_300to470_TuneCP5_13TeV_pythia8
+ - QCD_Pt_470to600_TuneCP5_13TeV_pythia8
+ - QCD_Pt_600to800_TuneCP5_13TeV_pythia8
+ - QCD_Pt_800to1000_TuneCP5_13TeV_pythia8
+ - QCD_Pt_1000to1400_TuneCP5_13TeV_pythia8
+ - QCD_Pt_1400to1800_TuneCP5_13TeV_pythia8
+ - QCD_Pt_1800to2400_TuneCP5_13TeV_pythia8
+ - QCD_Pt_2400to3200_TuneCP5_13TeV_pythia8
+ - QCD_Pt_3200toInf_TuneCP5_13TeV_pythia8
+
+ggH-tt:
+ - GluGluHToTauTau_Pt-200ToInf_M-125_TuneCP5_MINLO_13TeV-powheg-pythia8
+ - VBFHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8
+ - ttHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8
+ - ZHToTauTau_M125_CP5_13TeV-powheg-pythia8
+ - WminusHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8
+ - WplusHToTauTau_M125_TuneCP5_13TeV-powheg-pythia8
