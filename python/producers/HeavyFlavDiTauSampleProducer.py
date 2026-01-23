@@ -14,16 +14,9 @@ class DiTauSampleProducer(HeavyFlavBaseProducer):
         super(DiTauSampleProducer, self).beginFile(inputFile, outputFile, inputTree, wrappedOutputTree)
 
         # trigger variables
-        self.out.branch("passTrig", "O")
-        self.out.branch("passTrig_HLT_PFHT1050", "O")
-        self.out.branch("passHTTrig", "O")
-        self.out.branch("passTrig_HLT_AK8PFHT800_TrimMass50", "O")
-        self.out.branch("passTrig_HLT_AK8PFJet400_TrimMass30", "O")
-        self.out.branch("passTrig_HLT_AK8PFJet500", "O")
-        self.out.branch("passTrig_HLT_PFJet500", "O")
-        self.out.branch("passTrig_HLT_PFHT500_PFMET100_PFMHT100_IDTight", "O")
-        self.out.branch("passTrig_HLT_PFHT700_PFMET85_PFMHT85_IDTight", "O")
-        self.out.branch("passTrig_HLT_PFHT800_PFMET75_PFMHT75_IDTight", "O")
+        self.out.branch("passHtTrig", "O")
+        self.out.branch("passTauTrig", "O")
+
         # Event Variables
         self.out.branch("ak8_jets_multiplicity", "I")
         self.out.branch("loose_leptons_multiplicity", "I")
@@ -52,7 +45,6 @@ class DiTauSampleProducer(HeavyFlavBaseProducer):
         self.out.branch("bjets_eta", "F","1","medium_bjet_multiplicity")
         self.out.branch("bjets_phi", "F","1","medium_bjet_multiplicity")
         self.out.branch("bjets_m", "F","1","medium_bjet_multiplicity")
-        self.out.branch("new_ht1", "F")
 
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
@@ -61,17 +53,9 @@ class DiTauSampleProducer(HeavyFlavBaseProducer):
         self.correctJetsAndMET(event)
 
         # select lepton-cleaned jets
-        
-        #event.fatjets = [fj for fj in event._allFatJets if fj.pt > 200 and abs(fj.eta) < 2.4 and (fj.jetId & 2) and closest(fj, event.looseLeptons)[1] >= self._jetConeSize]
         event.fatjets = [fj for fj in event._allFatJets if fj.pt > 200 and abs(fj.eta) < 2.4 and (fj.jetId & 2)]
-
-        new_ht1 = sum([j.pt for j in event._allJets])
-
-        #event.ak4jets_all = [j for j in event._allJets if j.pt > 25 and abs(j.eta) < 2.4 and (j.jetId & 4) and closest(j, event.looseLeptons)[1] >= 0.4]
         event.ak4jets_all = [j for j in event._allJets if j.pt > 25 and abs(j.eta) < 2.4 and (j.jetId & 4)]
-        
-        #event.ht = sum([j.pt for j in event.ak4jets_all])
-        
+
         if len(event.looseLeptons) != 0:
             return False
         
@@ -105,16 +89,10 @@ class DiTauSampleProducer(HeavyFlavBaseProducer):
             count += 1
         
         probe_jets = []
-        probe_jets.append(event.fatjets[ztt_jet])
-        probe_jets.append(event.fatjets[highest_score1_jet])
-        
-        
-        #if probe_jets[0].ParticleNet_raw_probHtt < 0.9 and probe_jets[1].ParticleNet_raw_probHtt < 0.9:
-        #    return False
-        
-        
-        event.ak4jets = [j for j in event.ak4jets_all if deltaR(j.eta,j.phi,probe_jets[0].eta,probe_jets[0].phi) >= self._jetConeSize]
+        probe_jets.append(event.fatjets[0])
+        probe_jets.append(event.fatjets[1])
 
+        event.ak4jets = [j for j in event.ak4jets_all if deltaR(j.eta,j.phi,probe_jets[0].eta,probe_jets[0].phi) >= self._jetConeSize]
         event.bjets_loose = [j for j in event.ak4jets if j.btagDeepFlavB > self.DeepJet_WP_L]
         event.bjets_medium = [j for j in event.ak4jets if j.btagDeepFlavB > self.DeepJet_WP_M]
         
@@ -158,9 +136,6 @@ class DiTauSampleProducer(HeavyFlavBaseProducer):
             bjet_phi.append(fj.phi)
             bjet_m.append(fj.mass)
 
-        if passTrigger(event, ['HLT_AK8PFHT800_TrimMass50', 'HLT_AK8PFJet400_TrimMass30', 'HLT_AK8PFJet500', 'HLT_PFJet500', 'HLT_PFHT1050', 'HLT_PFHT500_PFMET100_PFMHT100_IDTight', 'HLT_PFHT700_PFMET85_PFMHT85_IDTight', 'HLT_PFHT800_PFMET75_PFMHT75_IDTight']) == 0:
-            return False
-        
         self.loadGenHistory(event, probe_jets)
         self.evalTagger(event, probe_jets)
         self.evalMassRegression(event, probe_jets)
@@ -176,9 +151,7 @@ class DiTauSampleProducer(HeavyFlavBaseProducer):
         self.out.fillBranch("bjet_multiplicity", len(event.bjets_medium))
         self.out.fillBranch("loose_bjet_multiplicity", len(event.bjets_loose))
         self.out.fillBranch("loose_leptons_multiplicity", len(event.looseLeptons))
-        #self.out.fillBranch("ST", event.fatjets[0].pt + event.fatjets[1].pt + event.met.pt)
         self.out.fillBranch("events", 1)
-        self.out.fillBranch("new_ht1", new_ht1)
 
         self.out.fillBranch("ak8_jets_pt",ak8_jet_pt)
         self.out.fillBranch("ak8_jets_eta",ak8_jet_eta)
@@ -200,16 +173,8 @@ class DiTauSampleProducer(HeavyFlavBaseProducer):
         self.out.fillBranch("bjets_phi",bjet_phi)
         self.out.fillBranch("bjets_m",bjet_m)
         
-        self.out.fillBranch("passTrig_HLT_PFHT1050", event.HLT_PFHT1050)
-        self.out.fillBranch("passTrig_HLT_AK8PFHT800_TrimMass50", event.HLT_AK8PFHT800_TrimMass50)
-        self.out.fillBranch("passTrig_HLT_AK8PFJet400_TrimMass30", event.HLT_AK8PFJet400_TrimMass30)
-        self.out.fillBranch("passTrig_HLT_AK8PFJet500", event.HLT_AK8PFJet500)
-        self.out.fillBranch("passTrig_HLT_PFJet500", event.HLT_PFJet500)
-        self.out.fillBranch("passTrig_HLT_PFHT500_PFMET100_PFMHT100_IDTight", event.HLT_PFHT500_PFMET100_PFMHT100_IDTight)
-        self.out.fillBranch("passTrig_HLT_PFHT700_PFMET85_PFMHT85_IDTight", event.HLT_PFHT700_PFMET85_PFMHT85_IDTight)
-        self.out.fillBranch("passTrig_HLT_PFHT800_PFMET75_PFMHT75_IDTight", event.HLT_PFHT800_PFMET75_PFMHT75_IDTight)
-        self.out.fillBranch("passHTTrig", passTrigger(event, ['HLT_AK8PFHT800_TrimMass50', 'HLT_AK8PFJet400_TrimMass30', 'HLT_AK8PFJet500', 'HLT_PFJet500', 'HLT_PFHT500_PFMET100_PFMHT100_IDTight', 'HLT_PFHT700_PFMET85_PFMHT85_IDTight', 'HLT_PFHT800_PFMET75_PFMHT75_IDTight']))
-        self.out.fillBranch("passTrig", passTrigger(event, ['HLT_AK8PFHT800_TrimMass50', 'HLT_AK8PFJet400_TrimMass30', 'HLT_AK8PFJet500', 'HLT_PFJet500', 'HLT_PFHT1050', 'HLT_PFHT500_PFMET100_PFMHT100_IDTight', 'HLT_PFHT700_PFMET85_PFMHT85_IDTight', 'HLT_PFHT800_PFMET75_PFMHT75_IDTight']))
+        self.out.fillBranch("passHtTrig", passTrigger(event, ['HLT_AK8PFHT800_TrimMass50', 'HLT_AK8PFJet400_TrimMass30', 'HLT_AK8PFJet500', 'HLT_PFJet500', 'HLT_PFHT1050', 'HLT_PFHT500_PFMET100_PFMHT100_IDTight', 'HLT_PFHT700_PFMET85_PFMHT85_IDTight', 'HLT_PFHT800_PFMET75_PFMHT75_IDTight']))
+        self.out.fillBranch("passTauTrig", passTrigger(event, ['DoubleMediumChargedIsoPFTauHPS35_Trk1_eta2p1_Reg','HLT_MediumChargedIsoPFTau180HighPtRelaxedIso_Trk50_eta2p1']))
 
         return True
 
