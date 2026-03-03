@@ -206,11 +206,13 @@ class HeavyFlavBaseProducer(Module, object):
             self.out.branch(prefix + "sj1_phi", "F")
             self.out.branch(prefix + "sj1_rawmass", "F")
             self.out.branch(prefix + "sj1_btagdeepcsv", "F")
+            self.out.branch(prefix + "sj1_tau21", "F")
             self.out.branch(prefix + "sj2_pt", "F")
             self.out.branch(prefix + "sj2_eta", "F")
             self.out.branch(prefix + "sj2_phi", "F")
             self.out.branch(prefix + "sj2_rawmass", "F")
             self.out.branch(prefix + "sj2_btagdeepcsv", "F")
+            self.out.branch(prefix + "sj2_tau21", "F")
 
             # taggers
             self.out.branch(prefix + "DeepAK8_TvsQCD", "F")
@@ -221,7 +223,7 @@ class HeavyFlavBaseProducer(Module, object):
             self.out.branch(prefix + "DeepAK8MD_WvsQCD", "F")
             self.out.branch(prefix + "DeepAK8MD_ZvsQCD", "F")
             self.out.branch(prefix + "DeepAK8MD_ZHbbvsQCD", "F")
-            self.out.branch(prefix + "DeepAK8MD_ZHccvsQCD", "F")
+            self.out.branch(prefix + "DeepAK8MD_ZHccvsCD", "F")
             self.out.branch(prefix + "DeepAK8MD_bbVsLight", "F")
             self.out.branch(prefix + "DeepAK8MD_bbVsTop", "F")
 
@@ -737,6 +739,7 @@ class HeavyFlavBaseProducer(Module, object):
                 self.out.fillBranch(prefix_sj + "eta", sj.eta)
                 self.out.fillBranch(prefix_sj + "phi", sj.phi)
                 self.out.fillBranch(prefix_sj + "rawmass", sj.mass)
+                self.out.fillBranch(prefix_sj + "tau21", sj.tau2 / sj.tau1 if sj.tau1 > 0 else 99)
                 try:
                     self.out.fillBranch(prefix_sj + "btagdeepcsv", sj.btagDeepB)
                 except RuntimeError:
