@@ -503,6 +503,29 @@ class HeavyFlavBaseProducer(Module, object):
         if not self.isMC:
             return
 
+        with open("/afs/cern.ch/user/l/lpaizano/NanoHRT/CMSSW_11_1_0_pre5_PY3/src/PhysicsTools/NanoHRTTools/data/JSON/puweights_BCDEFGHI.json") as f:
+            j = json.load(f)
+
+            content = j["corrections"][0]["data"]["content"]
+            nTrueInt = int(round(event.Pileup_nTrueInt))
+
+            for item in content:
+                if item["key"] == "nominal":
+                    weights_nom = item["value"]["content"]
+                elif item["key"] == "up":
+                    weights_up = item["value"]["content"]
+                elif item["key"] == "down":
+                    weights_down = item["value"]["content"]
+
+            weight_nom = weights_nom[nTrueInt]
+            weight_up = weights_up[nTrueInt]
+            weight_down = weights_down[nTrueInt]
+
+        self.out.fillBranch("puweight_nom",weight_nom)
+        self.out.fillBranch("puweight_up",weight_up)
+        self.out.fillBranch("puweight_down",weight_down)
+        self.out.fillBranch("Pileup_nTrueInt",nTrueInt)
+
         try:
             genparts = event.genparts
         except RuntimeError as e:
@@ -652,29 +675,6 @@ class HeavyFlavBaseProducer(Module, object):
         self.out.fillBranch("ht", event.ht)
         self.out.fillBranch("met", event.met.pt)
         self.out.fillBranch("metphi", event.met.phi)
-        
-        with open("/afs/cern.ch/user/l/lpaizano/NanoHRT/CMSSW_11_1_0_pre5_PY3/src/PhysicsTools/NanoHRTTools/data/JSON/puweights_BCDEFGHI.json") as f:
-            j = json.load(f)
-
-            content = j["corrections"][0]["data"]["content"]
-            nTrueInt = int(round(event.Pileup_nTrueInt))
-
-            for item in content:
-                if item["key"] == "nominal":
-                    weights_nom = item["value"]["content"]
-                elif item["key"] == "up":
-                    weights_up = item["value"]["content"]
-                elif item["key"] == "down":
-                    weights_down = item["value"]["content"]
-
-            weight_nom = weights_nom[nTrueInt]
-            weight_up = weights_up[nTrueInt]
-            weight_down = weights_down[nTrueInt]
-
-        self.out.fillBranch("puweight_nom",weight_nom)
-        self.out.fillBranch("puweight_up",weight_up)
-        self.out.fillBranch("puweight_down",weight_down)
-        self.out.fillBranch("Pileup_nTrueInt",nTrueInt)
 
         event.vetomap_ak4jets = [j for j in event._allJets if j.pt > 15 and (j.chEmEF + j.neEmEF) < 0.9  and (j.jetId & 2) and closest(j, event.looseMuons)[1] >= 0.2]
         #Jets Veto Maps
